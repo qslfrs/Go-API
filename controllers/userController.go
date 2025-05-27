@@ -24,7 +24,17 @@ type UserResponse struct {
 func GetUsers(c *gin.Context) {
 	var users []models.User
 	database.DB.Find(&users)
-	c.JSON(http.StatusOK, response{200, users, "success"})
+
+	var result []UserResponse
+	for _, user := range users {
+		result = append(result, UserResponse{
+			ID:    user.ID,
+			Name:  user.Name,
+			Email: user.Email,
+		})
+	}
+
+	c.JSON(http.StatusOK, response{200, result, "success"})
 }
 
 // GET /users/:id
@@ -36,13 +46,19 @@ func GetUserByID(c *gin.Context) {
 		return
 	}
 
-	userResponse := UserResponse{
-		ID:    user.ID,
-		Name:  user.Name,
-		Email: user.Email,
+	// userResponse := UserResponse{
+	// 	ID:    user.ID,
+	// 	Name:  user.Name,
+	// 	Email: user.Email,
+	// }
+
+	data := map[string]interface{}{
+		"id":    user.ID,
+		"name":  user.Name,
+		"email": user.Email,
 	}
 
-	c.JSON(http.StatusOK, response{200, userResponse, "success"})
+	c.JSON(http.StatusOK, response{200, data, "success"})
 }
 
 // POST /users
