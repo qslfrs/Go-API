@@ -14,6 +14,12 @@ type response struct {
 	Message string      `json:"message"`
 }
 
+type UserResponse struct {
+	ID    int    `json:"id`
+	Name  string `json:"name"`
+	Email string `json:"email"`
+}
+
 // GET /users
 func GetUsers(c *gin.Context) {
 	var users []models.User
@@ -29,7 +35,14 @@ func GetUserByID(c *gin.Context) {
 		c.JSON(http.StatusNotFound, response{404, nil, "user not found"})
 		return
 	}
-	c.JSON(http.StatusOK, response{200, user, "success"})
+
+	userResponse := UserResponse{
+		ID:    user.ID,
+		Name:  user.Name,
+		Email: user.Email,
+	}
+
+	c.JSON(http.StatusOK, response{200, userResponse, "success"})
 }
 
 // POST /users
