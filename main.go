@@ -11,10 +11,11 @@ func main() {
 	// 1. Koneksi DB & auto-migrate
 	database.Connect()
 	database.DB.AutoMigrate(&models.User{})
+	database.DB.AutoMigrate(&models.Transaction{})
 
 	// 2. Setup router
 	r := gin.Default()
-	routes.UserRoutes(r)
+	routes.Routes(r)
 
 	// 3. Run server
 	r.Run(":8080") // listen on localhost:8080

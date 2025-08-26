@@ -40,6 +40,7 @@ func GetUsers(c *gin.Context) {
 // GET /users/:id
 func GetUserByID(c *gin.Context) {
 	id := c.Param("id")
+	// id := c.Query("id") //query param
 	var user models.User
 	if err := database.DB.First(&user, id).Error; err != nil {
 		c.JSON(http.StatusNotFound, response{404, nil, "user not found"})
